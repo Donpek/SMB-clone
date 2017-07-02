@@ -5,7 +5,20 @@
     <title>SMB clone</title>
 
     <script src='jquery-3.2.1.min.js'></script>
-    <script src='game_constants.js'></script>
+    <script>
+    /* GAME CONSTANTS */
+    const TILE_W = TILE_H = 16;
+    const FPS = 1000/30;
+    const MAPS = [
+      'maps/test.json',
+    ];
+    const SPRITES = [
+      'sprites/main_sheet.png',
+      'sprites/mario_sheet.png',
+      'sprites/goomba_sheet.png',
+    ];
+    const GRAVITY = 5; // px/frame
+    </script>
 
     <script src='misc.js'></script>
     <script src='canvas.js'></script>
