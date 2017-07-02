@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>SMB clone</title>
+
+    <script src='jquery-3.2.1.min.js'></script>
+    <script src='game_constants.js'></script>
+
+    <script src='misc.js'></script>
+    <script src='canvas.js'></script>
+    <script src='keyboard.js'></script>
+    <script src='collision.js'></script>
+    <script src='animation.js'></script>
+
+    <script src='graphics.js'></script>
+    <script src='map.js'></script>
+  </head>
+
+  <body>
+    <canvas id='game'></canvas>
+
+    <script>
+    /* COLLIDERS */
+    const coll_1x1 = new RectCollider(0,0,1,1);
+    const coll_1x2 = new RectCollider(0,0,1,2);
+    /**/
+
+    /* ANIMATIONS */
+    const ani_goomba_walk = new Animation([0,1],[10,10]);
+    /**/
+    </script>
+
+    <script>
+    let player, current_map;
+    $(document).ready( () => {
+      const GC = new HTML_Canvas('game', 640, 480, '2d');
+      Drawable.prototype.ctx = GC.ctx;
+
+      on_sprites_loaded = () => {
+        $.getJSON(MAPS[0], json => {
+          current_map = new Map(json);
+
+          setInterval( () => {
+            GC.ctx.fillStyle = '#abc';
+            GC.ctx.fillRect(0,0,640,480);
+            current_map.render();
+            player.draw.sheet(player.x, player.y, player.w, player.h, 0);
+          }, FPS);
+          });
+      };
+
+      Sprites(SPRITES);
+    });
+    </script>
+  </body>
+</html>
