@@ -1,0 +1,84 @@
+Engine improvements:
+- move 'flag' property from Entity to ColliderRect,
+- add callback after end of an animation,
+- 
+
+
+
+
++ Loading levels from json
+
+- Movement-disabling collision
+
+- Gravity (tapering of vertical velocity)
+
+- Mario:
+  - Run
+
+  - Sprint
+
+  - Jump
+
+  - Duck (Pipe teleportation from one level to another)
+
+  - Death:
+    - on touch: Pirhanna Plant, Fireball
+
+    - on touch (&& player.y > coll.y): Goomba, Green Koopa, Red Koopa, <...>
+
+    - player.y > GC.width
+
+    - time running out
+  ---
+
+  - Power-ups:
+    -Red mushroom
+
+    -Green mushroom
+
+    -Fire flower
+
+    -Starman
+
+    -Coin
+  ---
+---
+  
+- Goomba:
+  - Continuously Walk to the left
+
+  - Upon horizontal collision, invert horizontal velocity
+---
+
+- Koopa Troopa:
+  - Continuously Walk to the left
+
+  - Upon horizontal collision, invert horizontal velocity
+
+  - Upon vertical collision, play an animation and, after that, turn into a Koopa Shell
+---
+
+- Koopa Shell:
+  'koopa_shell'
+  - After x amount of time, turn into a Koopa Troopa,
+
+  - Upon collision, start moving horizontally and change flag to 'koopa_shell_deadly'
+
+  'koopa_shell_deadly'
+  - Upon horizontal collision with anything besides a 'solid'
+---
+
+- Mystery box: 
+  - Collision animation 
+
+  - Coin box (spawn sfx coin with its own animation, too (make it destroy itself after animation) )
+
+  - Red shroom box (spawn shroom inside of itself (unshift, not push) )
+
+  - Replaced itself with an empty box after end of collision animation
+---
+
+
+
+
+- 

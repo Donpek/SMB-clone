@@ -1,5 +1,3 @@
-
-
 const Sprite = function sprite_constructor(file_path)
 {
   this.image = null;
@@ -16,24 +14,48 @@ const Sprite = function sprite_constructor(file_path)
   }
 }
 
-const Drawable = function drawable_constructor(sprite)
+const Drawable = function drawable_constructor(sprite, entity)
 {
   this.sprite = sprite;
+  this.entity = entity;
 
-  this.whole = function draw_whole_image(x, y)  {
-    Drawable.prototype.ctx.drawImage(this.sprite.image, x, y, TILE_W, TILE_H);
+  this.whole = function draw_whole_image(){
+    Drawable.ctx.drawImage(
+      this.sprite.image,
+      this.entity.x,
+      this.entity.y,
+      this.entity.w,
+      this.entity.h
+    );
   };
 
+  /*
   this.sheet = function draw_from_sheet(x, y, w, h, sprite_id)  {
     const coords = i2xy(sprite_id, this.sprite.widthInTiles);
-    Drawable.prototype.ctx.drawImage(this.sprite.image, coords.x*TILE_W, coords.y*TILE_H,
+    Drawable.ctx.drawImage(this.sprite.image, coords.x*TILE_W, coords.y*TILE_H,
       w, h, x, y, w, h);
+  };
+  */
+  this.sheet = function draw_from_sheet(sprite_id)  {
+    const coords = i2xy(sprite_id, this.sprite.widthInTiles);
+    Drawable.ctx.drawImage(
+      this.sprite.image,
+      coords.x * Drawable.UNIT_WIDTH,
+      coords.y * Drawable.UNIT_HEIGHT,
+      this.entity.w,
+      this.entity.h,
+      this.entity.x,
+      this.entity.y,
+      this.entity.w,
+      this.entity.h
+    );
   };
 
   this.curentFrame = null;
   this.frameDelayCounter = null;
   this.currentFrameIndex = 0;
 
+  /*
   this.ani = function draw_animated(x, y, w, h, animation)  {
     if(this.frameDelayCounter === null)
       this.frameDelayCounter = animation.sequence[this.currentFrameIndex].delay;
@@ -48,28 +70,30 @@ const Drawable = function drawable_constructor(sprite)
       this.currentFrame = animation.sequence[this.currentFrameIndex].sprite_id;
     }
     this.sheet(x, y, w, h, this.currentFrame);
-    /*const sprite_coordinates = i2xy(this.currentFrame,
-      this.sprite.widthInTiles);
-    const width = TILE_W*w,
-          height = TILE_H*h;
-    Drawable.prototype.ctx.drawImage(this.sprite.image, sprite_coordinates.x*TILE_W,
-      sprite_coordinates.y*TILE_H, width, height, x, y, width, height);
-*/
+  };
+  */
+  this.ani = function draw_animated(animation){
+    if(this.frameDelayCounter === null)
+      this.frameDelayCounter = animation.sequence[this.currentFrameIndex].delay;
+
+    if(this.frameDelayCounter++ === animation.sequence[this.currentFrameIndex].delay){
+      this.frameDelayCounter = 0;
+      this.currentFrameIndex++;
+
+      if(this.currentFrameIndex === animation.sequence.length){
+        this.currentFrameIndex = 0;
+      }
+      this.currentFrame = animation.sequence[this.currentFrameIndex].sprite_id;
+    }
+    this.sheet(this.currentFrame);
   };
 }
 
-//----------------------------
-//------------LOADING---------
-//----------------------------
-
-const sprites = {};
-let on_sprites_loaded = null;
-
-const Sprites = function start_loading_sprites(file_paths)
+const Load_Sprites = function start_loading_sprites(file_paths, container, callback)
 {
   const sprite = new Sprite(file_paths[0]);
   file_paths.shift();
-  sprites[sprite.name] = sprite;
+  container[sprite.name] = sprite;
 
   sprite.image.onload = function()
   {
@@ -79,10 +103,10 @@ const Sprites = function start_loading_sprites(file_paths)
 
     if(file_paths.length > 0)
     {
-      Sprites(file_paths);
+      Load_Sprites(file_paths, container, callback);
     }else{
       console.log('Done loading sprites.');
-      on_sprites_loaded();
+      callback();
     }
   };
 }

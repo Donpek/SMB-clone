@@ -1,6 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" tiledversion="1.0.1" orientation="orthogonal" renderorder="right-down" width="32" height="16" tilewidth="16" tileheight="16" nextobjectid="1">
- <tileset firstgid="1" source="../sprites/sheet.tsx"/>
+ <properties>
+  <property name="name" value="World 1-1"/>
+ </properties>
+ <tileset firstgid="1" name="smb" tilewidth="16" tileheight="16" tilecount="100" columns="10">
+  <image source="../sprites/main_sheet.png" width="160" height="160"/>
+  <tile id="0">
+   <objectgroup draworder="index" name="brick"/>
+  </tile>
+  <tile id="3">
+   <objectgroup draworder="index" name="box_red_shroom"/>
+  </tile>
+  <tile id="8">
+   <objectgroup draworder="index" name="pipe_up_left"/>
+  </tile>
+  <tile id="9">
+   <objectgroup draworder="index" name="pipe_up_right"/>
+  </tile>
+  <tile id="10">
+   <objectgroup draworder="index" name="brick_mod"/>
+  </tile>
+  <tile id="13">
+   <objectgroup draworder="index" name="box_coin"/>
+  </tile>
+  <tile id="18">
+   <objectgroup draworder="index" name="pipe_up_left_mod"/>
+  </tile>
+  <tile id="19">
+   <objectgroup draworder="index" name="pipe_up_right_mod"/>
+  </tile>
+  <tile id="20">
+   <objectgroup draworder="index" name="box"/>
+  </tile>
+  <tile id="23">
+   <objectgroup draworder="index"/>
+  </tile>
+  <tile id="24">
+   <objectgroup draworder="index"/>
+  </tile>
+  <tile id="25">
+   <objectgroup draworder="index" name="koopa"/>
+  </tile>
+  <tile id="40">
+   <objectgroup draworder="index" name="ground"/>
+  </tile>
+  <tile id="50">
+   <objectgroup draworder="index" name="red_shroom"/>
+  </tile>
+  <tile id="60">
+   <objectgroup draworder="index" name="mario"/>
+  </tile>
+  <tile id="61">
+   <objectgroup draworder="index" name="goomba"/>
+  </tile>
+ </tileset>
  <layer name="floor" width="32" height="16">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,

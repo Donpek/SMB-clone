@@ -12,6 +12,18 @@
     const MAPS = [
       'maps/test.json',
     ];
+    const TILE_IDS = {
+      MARIO: 61,
+      GOOMBA: 62,
+      //KOOPA: 63,
+      BRICK: 1,
+      GROUND: 31,
+      BOX_MYSTERY: 24,
+      BOX_COIN: 14,
+      BOX_RED_SHROOM: 4,
+      PIPE_TOP: 9,
+      RED_SHROOM: 51,
+    };
     const SPRITES = [
       'sprites/main_sheet.png',
       'sprites/mario_sheet.png',
@@ -42,28 +54,35 @@
     /* ANIMATIONS */
     const ani_goomba_walk = new Animation([0,1],[10,10]);
     /**/
+
+    /**/
+    const sprites = {};
+    const maps = {};
+    let current_map;
+    /**/
     </script>
 
     <script>
-    let player, current_map;
     $(document).ready( () => {
       const GC = new HTML_Canvas('game', 640, 480, '2d');
-      Drawable.prototype.ctx = GC.ctx;
+      Drawable.ctx = GC.ctx;
+      Drawable.UNIT_WIDTH = Map.UNIT_WIDTH = TILE_W;
+      Drawable.UNIT_HEIGHT = Map.UNIT_HEIGHT = TILE_H;
 
-      on_sprites_loaded = () => {
-        $.getJSON(MAPS[0], json => {
-          current_map = new Map(json);
+
+      Load_Sprites(SPRITES, sprites, () => {
+        Init_Maps(MAPS, maps, () => {
+          current_map = maps['World 1-1'];
 
           setInterval( () => {
             GC.ctx.fillStyle = '#abc';
             GC.ctx.fillRect(0,0,640,480);
             current_map.render();
-            player.draw.sheet(player.x, player.y, player.w, player.h, 0);
+            current_map.player.draw.sheet(0);
           }, FPS);
-          });
-      };
+        });
+      });
 
-      Sprites(SPRITES);
     });
     </script>
   </body>

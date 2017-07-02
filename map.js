@@ -5,22 +5,10 @@ const Entity = function entity_constructor(args){ //draw, coll, ani, flag
   }
 }
 
-const ID = {
-  MARIO: 61,
-  GOOMBA: 62,
-  //KOOPA: 63,
-  BRICK: 1,
-  GROUND: 31,
-  BOX_MYSTERY: 24,
-  BOX_COIN: 14,
-  BOX_RED_SHROOM: 4,
-  PIPE_TOP: 9,
-  RED_SHROOM: 51,
-};
-
 const Map = function map_constructor(json){
   this.json = json;
   this.entities = [];
+  this.player = null;
 
   /* INITIALIZATION */
   let i = 0;
@@ -28,50 +16,57 @@ const Map = function map_constructor(json){
 
     for(let x=0;x<json.width;x++,i++){
       let id = json.layers[0].data[i];
+      let ent;
 
       switch(id){
 
-        case ID.GROUND:
-          this.entities.push(new Entity({
-            x: TILE_W*x, y: TILE_H*y,
-            w: TILE_W, h: TILE_H,
-            draw: new Drawable(sprites.main_sheet),
-            frame: ID.GROUND - 1,
-            flag: 'solid',
-          }));
+        case TILE_IDS.GROUND:
+          ent = new Entity({
+            x: Map.UNIT_WIDTH*x, y: Map.UNIT_HEIGHT*y,
+            w: Map.UNIT_WIDTH, h: Map.UNIT_HEIGHT,
+            frame: TILE_IDS.GROUND - 1,
+            solid: true,
+          });
+          ent.draw = new Drawable(sprites.main_sheet, ent);
+          this.entities.push(ent);
         break;
 
-        case ID.BRICK:
-          this.entities.push(new Entity({
-            x: TILE_W*x, y: TILE_H*y,
-            w: TILE_W, h: TILE_H,
-            draw: new Drawable(sprites.main_sheet),
-            frame: ID.BRICK - 1,
-            flag: 'solid',
-          }));
+        case TILE_IDS.BRICK:
+          ent = new Entity({
+            x: Map.UNIT_WIDTH*x, y: Map.UNIT_HEIGHT*y,
+            w: Map.UNIT_WIDTH, h: Map.UNIT_HEIGHT,
+            frame: TILE_IDS.BRICK - 1,
+            solid: true,
+          });
+          ent.draw = new Drawable(sprites.main_sheet, ent);
+          this.entities.push(ent);
         break;
 
-        case ID.BOX_COIN:
-          this.entities.push(new Entity({
-            x: TILE_W*x, y: TILE_H*y,
-            w: TILE_W, h: TILE_H,
-            draw: new Drawable(sprites.main_sheet),
-            frame: ID.BOX_MYSTERY - 1,
+        case TILE_IDS.BOX_COIN:
+          ent = new Entity({
+            x: Map.UNIT_WIDTH*x, y: Map.UNIT_HEIGHT*y,
+            w: Map.UNIT_WIDTH, h: Map.UNIT_HEIGHT,
+            frame: TILE_IDS.BOX_MYSTERY - 1,
             flag: 'box_coin',
-          }));
+            solid: true,
+          });
+          ent.draw = new Drawable(sprites.main_sheet, ent);
+          this.entities.push(ent);
         break;
 
-        case ID.BOX_RED_SHROOM:
-          this.entities.push(new Entity({
-            x: TILE_W*x, y: TILE_H*y,
-            w: TILE_W, h: TILE_H,
-            draw: new Drawable(sprites.main_sheet),
-            frame: ID.BOX_MYSTERY - 1,
+        case TILE_IDS.BOX_RED_SHROOM:
+          ent = new Entity({
+            x: Map.UNIT_WIDTH*x, y: Map.UNIT_HEIGHT*y,
+            w: Map.UNIT_WIDTH, h: Map.UNIT_HEIGHT,
+            frame: TILE_IDS.BOX_MYSTERY - 1,
             flag: 'box_red_shroom',
-          }));
+            solid: true,
+          });
+          ent.draw = new Drawable(sprites.main_sheet, ent);
+          this.entities.push(ent);
         break;
 
-        case ID.PIPE_TOP:
+        case TILE_IDS.PIPE_TOP:
           let destination_level_name, destination_tile_index;
           for(let a=1;a<json.layers.length;a++){
             if(json.layers[a].name === 'pipe' && json.layers[a].data[i] > 0){
@@ -80,38 +75,43 @@ const Map = function map_constructor(json){
               break;
             }
           }
-          this.entities.push(new Entity({
-            x: TILE_W*x, y: TILE_H*y,
-            w: TILE_W*2, h: TILE_H*2,
-            draw: new Drawable(sprites.main_sheet),
-            frame: ID.PIPE_TOP - 1,
+          ent = new Entity({
+            x: Map.UNIT_WIDTH*x, y: Map.UNIT_HEIGHT*y,
+            w: Map.UNIT_WIDTH*2, h: Map.UNIT_HEIGHT*2,
+            frame: TILE_IDS.PIPE_TOP - 1,
             destination_level_name: destination_level_name,
             destination_tile_index: destination_tile_index,
             flag: 'pipe_top',
-          }));
+            coll: new RectCollider(0.25,0,1.5,0.25),
+            solid: true,
+          });
+          ent.draw = new Drawable(sprites.main_sheet, ent);
+          this.entities.push(ent);
         break;
 
-        case ID.MARIO:
-          player = new Entity({
-            x: TILE_W*x, y: TILE_H*y,
-            w: TILE_W, h: TILE_H,
+        case TILE_IDS.MARIO:
+          this.player = new Entity({
+            x: Map.UNIT_WIDTH*x, y: Map.UNIT_HEIGHT*y,
+            w: Map.UNIT_WIDTH, h: Map.UNIT_HEIGHT,
             run_speed: 5,
             sprint_speed: 10,
-            draw: new Drawable(sprites.mario_sheet),
             coll: coll_1x1,
+            flag: 'player',
           });
+          this.player.draw = new Drawable(sprites.mario_sheet, this.player);
         break;
 
-        case ID.GOOMBA:
-          this.entities.push(new Entity({
-            x: TILE_W*x, y: TILE_H*y,
-            w: TILE_W, h: TILE_H,
+        case TILE_IDS.GOOMBA:
+          ent = new Entity({
+            x: Map.UNIT_WIDTH*x, y: Map.UNIT_HEIGHT*y,
+            w: Map.UNIT_WIDTH, h: Map.UNIT_HEIGHT,
             mov_speed: 3,
-            draw: new Drawable(sprites.goomba_sheet),
             coll: coll_1x1,
             flag: 'goomba',
             ani: ani_goomba_walk,
-          }));
+          });
+          ent.draw = new Drawable(sprites.goomba_sheet, ent);
+          this.entities.push(ent);
         break;
       }
     }
@@ -122,21 +122,25 @@ const Map = function map_constructor(json){
     for(let i=0;i<this.entities.length;i++){
       if(this.entities[i].frame !== undefined){
 
-        this.entities[i].draw.sheet(
-          this.entities[i].x, this.entities[i].y,
-          this.entities[i].w, this.entities[i].h,
-          this.entities[i].frame
-        );
+        this.entities[i].draw.sheet(this.entities[i].frame);
       }else if(this.entities[i].ani !== undefined){
 
-        this.entities[i].draw.ani(
-          this.entities[i].x, this.entities[i].y,
-          this.entities[i].w, this.entities[i].h,
-          this.entities[i].ani
-        );
+        this.entities[i].draw.ani(this.entities[i].ani);
       }
     }
   }
+}
 
-  //throw 'TO-DO map_constructor';
+const Init_Maps = function initialize_maps(file_paths, container, callback){
+  $.getJSON(file_paths[0], json => {
+    file_paths.shift();
+    container[json.properties.name] = new Map(json);
+
+    if(file_paths.length > 0){
+      Init_Maps(file_paths, container, callback);
+    }else{
+      console.log('Done initializing maps.');
+      callback();
+    }
+  });
 }
