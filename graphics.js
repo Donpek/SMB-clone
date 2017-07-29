@@ -17,15 +17,15 @@ const Sprite = function sprite_constructor(file_path)
 const Drawable = function drawable_constructor(sprite, entity)
 {
   this.sprite = sprite;
-  this.entity = entity;
+  this.ent = entity;
 
   this.whole = function draw_whole_image(){
     Drawable.ctx.drawImage(
       this.sprite.image,
-      this.entity.x,
-      this.entity.y,
-      this.entity.w,
-      this.entity.h
+      this.ent.x,
+      this.ent.y,
+      this.ent.w,
+      this.ent.h
     );
   };
 
@@ -42,12 +42,12 @@ const Drawable = function drawable_constructor(sprite, entity)
       this.sprite.image,
       coords.x * Drawable.UNIT_WIDTH,
       coords.y * Drawable.UNIT_HEIGHT,
-      this.entity.w,
-      this.entity.h,
-      this.entity.x,
-      this.entity.y,
-      this.entity.w,
-      this.entity.h
+      this.ent.w,
+      this.ent.h,
+      this.ent.x,
+      this.ent.y,
+      this.ent.w,
+      this.ent.h
     );
   };
 

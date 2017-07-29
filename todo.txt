@@ -1,7 +1,6 @@
 Engine improvements:
-- move 'flag' property from Entity to ColliderRect,
 - add callback after end of an animation,
-- 
+---
 
 
 
@@ -13,25 +12,25 @@ Engine improvements:
 - Gravity (tapering of vertical velocity)
 
 - Mario:
-  - Run
+  - Run (acceleration, max speed)
 
-  - Sprint
+  - Sprint (a little bit faster acceleration, higher max speed)
 
-  - Jump
+  - Jump (max height, holding longer makes you jump higher)
 
-  - Duck (Pipe teleportation from one level to another)
+  ? Duck (Pipe teleportation from one level to another)
 
   - Death:
-    - on touch: Pirhanna Plant, Fireball
+    ? on touch: Pirhanna Plant, Fireball
 
     - on touch (&& player.y > coll.y): Goomba, Green Koopa, Red Koopa, <...>
 
     - player.y > GC.width
 
-    - time running out
+    ? time running out
   ---
 
-  - Power-ups:
+  ? Power-ups:
     -Red mushroom
 
     -Green mushroom
@@ -49,6 +48,8 @@ Engine improvements:
 
   - Upon horizontal collision, invert horizontal velocity
 ---
+
+??????????????????????????????????????????????????????????????????????
 
 - Koopa Troopa:
   - Continuously Walk to the left

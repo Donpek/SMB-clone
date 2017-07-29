@@ -58,7 +58,7 @@
     /**/
     const sprites = {};
     const maps = {};
-    let current_map;
+    let curr_map;
     /**/
     </script>
 
@@ -72,13 +72,51 @@
 
       Load_Sprites(SPRITES, sprites, () => {
         Init_Maps(MAPS, maps, () => {
-          current_map = maps['World 1-1'];
+          curr_map = maps['World 1-1'];
 
           setInterval( () => {
+            /* RENDERING */
             GC.ctx.fillStyle = '#abc';
             GC.ctx.fillRect(0,0,640,480);
-            current_map.render();
-            current_map.player.draw.sheet(0);
+            curr_map.render();
+            curr_map.player.draw.sheet(
+              0
+            );
+            /**/
+
+            /* GAME LOGIC */
+
+              /* COLLISION */
+            let ne, nw, se, sw;
+            for(let i=0;i<curr_map.ents.length;i++){
+              if(curr_map.ents[i].dx !== undefined){
+                curr_map.ents[i].x += curr_map.ents[i].dx;
+              }
+              if(curr_map.ents[i].dy !== undefined){
+                curr_map.ents[i].y += curr_map.ents[i].dy;
+              }
+            }
+
+            ne = coll(curr_map.player, 'se');
+            nw = coll(curr_map.player, 'sw');
+            se = coll(curr_map.player, 'ne');
+            sw = coll(curr_map.player, 'nw');
+            if(
+              se !== null &&
+              sw !== null
+            ){
+              if(se.solid && sw.solid){
+                console.log('s');
+                curr_map.player.dy = 0;
+              }
+            }
+              /**/
+
+              /* POSITIONING */
+            curr_map.player.y += curr_map.player.dy;
+              /**/
+
+            /**/
           }, FPS);
         });
       });

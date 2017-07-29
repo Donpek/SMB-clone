@@ -7,7 +7,7 @@ const Entity = function entity_constructor(args){ //draw, coll, ani, flag
 
 const Map = function map_constructor(json){
   this.json = json;
-  this.entities = [];
+  this.ents = [];
   this.player = null;
 
   /* INITIALIZATION */
@@ -28,7 +28,7 @@ const Map = function map_constructor(json){
             solid: true,
           });
           ent.draw = new Drawable(sprites.main_sheet, ent);
-          this.entities.push(ent);
+          this.ents.push(ent);
         break;
 
         case TILE_IDS.BRICK:
@@ -39,7 +39,7 @@ const Map = function map_constructor(json){
             solid: true,
           });
           ent.draw = new Drawable(sprites.main_sheet, ent);
-          this.entities.push(ent);
+          this.ents.push(ent);
         break;
 
         case TILE_IDS.BOX_COIN:
@@ -51,7 +51,7 @@ const Map = function map_constructor(json){
             solid: true,
           });
           ent.draw = new Drawable(sprites.main_sheet, ent);
-          this.entities.push(ent);
+          this.ents.push(ent);
         break;
 
         case TILE_IDS.BOX_RED_SHROOM:
@@ -63,7 +63,7 @@ const Map = function map_constructor(json){
             solid: true,
           });
           ent.draw = new Drawable(sprites.main_sheet, ent);
-          this.entities.push(ent);
+          this.ents.push(ent);
         break;
 
         case TILE_IDS.PIPE_TOP:
@@ -86,7 +86,7 @@ const Map = function map_constructor(json){
             solid: true,
           });
           ent.draw = new Drawable(sprites.main_sheet, ent);
-          this.entities.push(ent);
+          this.ents.push(ent);
         break;
 
         case TILE_IDS.MARIO:
@@ -97,6 +97,8 @@ const Map = function map_constructor(json){
             sprint_speed: 10,
             coll: coll_1x1,
             flag: 'player',
+            dy: GRAVITY,
+            dx: 0,
           });
           this.player.draw = new Drawable(sprites.mario_sheet, this.player);
         break;
@@ -105,13 +107,15 @@ const Map = function map_constructor(json){
           ent = new Entity({
             x: Map.UNIT_WIDTH*x, y: Map.UNIT_HEIGHT*y,
             w: Map.UNIT_WIDTH, h: Map.UNIT_HEIGHT,
+            draw: new Drawable(sprites.goomba_sheet),
             mov_speed: 3,
             coll: coll_1x1,
             flag: 'goomba',
             ani: ani_goomba_walk,
+            dy: GRAVITY,
           });
           ent.draw = new Drawable(sprites.goomba_sheet, ent);
-          this.entities.push(ent);
+          this.ents.push(ent);
         break;
       }
     }
@@ -119,13 +123,25 @@ const Map = function map_constructor(json){
   /**/
 
   this.render = function render_map(){
-    for(let i=0;i<this.entities.length;i++){
-      if(this.entities[i].frame !== undefined){
+    for(let i=0;i<this.ents.length;i++){
+      if(this.ents[i].frame !== undefined){
 
-        this.entities[i].draw.sheet(this.entities[i].frame);
-      }else if(this.entities[i].ani !== undefined){
+        this.ents[i].draw.sheet(
+          this.ents[i].frame,
+          this.ents[i].x,
+          this.ents[i].y,
+          this.ents[i].w,
+          this.ents[i].h
+        );
+      }else if(this.ents[i].ani !== undefined){
 
-        this.entities[i].draw.ani(this.entities[i].ani);
+        this.ents[i].draw.ani(
+          this.ents[i].ani,
+          this.ents[i].x,
+          this.ents[i].y,
+          this.ents[i].w,
+          this.ents[i].h
+        );
       }
     }
   }
